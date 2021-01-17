@@ -28,7 +28,7 @@ set.seed(2001)
 piaw <- questDelicateMeth1(n,P,theta,n.sim)
 ```
 
-$\text{a. Calcul de la moyenne et l'ecart type estimés}$
+$\textbf{a. Calcul de la moyenne et l'ecart type estimés}$
 
 ```{r}
 probaoui1 <- P * (2 * theta - 1) - theta + 1
@@ -41,26 +41,26 @@ varX <- n * probaoui1 * (1 - probaoui1)
 ecarttype1 <- sqrt(b^2 * varX)
 ```
 
-$\text{b. Les valeurs theoriques correspondantes}$
+$\textbf{b. Les valeurs theoriques correspondantes}$
 
 ```{r}
 mean(piaw)
 sd(piaw)
 ```
-$\text{c.}$
+$\textbf{c.}$
 
 ```{r}
 hist(piaw,probability = TRUE,col = "blue")
 ```
 
-$\text{2. Methode 2}$
+$\textbf{2. Methode 2}$
 
 ```{r}
 alpha <- 0.217
 pia <- questDelicateMeth2(n, P, theta, alpha, n.sim)
 ```
 
-$\text{a. Calcul de la moyenne et l'ecart type estimés}$
+$\textbf{a. Calcul de la moyenne et l'ecart type estimés}$
 
 ```{r}
 probaoui2 <- (theta * P) + ((1 - theta) * alpha) 
@@ -71,29 +71,29 @@ varX <- n * probaoui2 * (1 - probaoui2)
 ecarttype2 <- sqrt((1 / (n * theta)^2) * varX)
 ```
 
-$\text{b. Les valeurs theoriques correspondantes}$
+$\textbf{b. Les valeurs theoriques correspondantes}$
 
 ```{r}
 mean(pia)
 sd(pia)
 ```
 
-$\text{c.}$
+$\textbf{c.}$
 
-$\text{Tracage de l'histogramme}$
+$\textbf{Tracage de l'histogramme}$
 
 ```{r}
 hist(pia,probability = TRUE,col = "red")
 ```
 
-$\text{3.}$
+$\textbf{3.}$
 
 ```{r}
 ```
 
-$\text{3.Echantillonage classique}$
+$\textbf{3.Echantillonage classique}$
 
-$\text{4.a : Calcul de } \bar{y}_{u} et \ \text{S pour la population}$
+$\textbf{4.a : Calcul de } \bar{y}_{u} et \ \textbf{S pour la population}$
 
 ```{r}
 source("Script2.R")
@@ -102,14 +102,14 @@ sigmacarre <- (1 / N) * sum((pop - ybarru)^2)
 S <- sqrt((sigmacarre * N) / (N - 1))
 ```
 
-$\text{4.b : Generons une trame de données contenant toutes les echantillons possibles}$
+$\textbf{4.b : Generons une trame de données contenant toutes les echantillons possibles}$
 
 ```{r}
 
 ```
 
 
-$\text{4.c :}$
+$\textbf{4.c :}$
 
 ```{r}
 options(OutDe=",")
@@ -120,27 +120,27 @@ n <- 3
 ech.all <- cbind ( choix <- t ( matrix ( combn (1: N , n ) ,n , n.ech ) ) ,( matrix (pop [ choix ] , n.ech , n ) ) )
 head (ech.all)
 donneepop <- ech.all[,4:6]
-ybarr <- apply(donneepop,1,mean)
+ybar <- apply(donneepop,1,mean)
 s <- apply(donneepop,1,sd)
-sybarr <- (1 - (n / N)) * (s^2 / n)
-b.inf <- ybarr - (1.96 * sqrt(sybarr))
-b.sup <- ybarr + (1.96 * sqrt(sybarr))
+sigmachapeau.ybar <- (1 - (n / N)) * (s^2 / n)
+b.inf <- ybar - (1.96 * sqrt(sigmachapeau.ybar))
+b.sup <- ybar + (1.96 * sqrt(sigmachapeau.ybar))
 size <- 56
 incl <- rep(0,size)
 for (i in 1:size){
-  if(ybarru <= b.sup[i] && ybarr >= b.inf[i]){
+  if(ybarru <= b.sup[i] && ybar >= b.inf[i]){
     incl[i] <- 1
   }
   else{
     incl[i] <- 0
   }
 }
-tram.donnee <- cbind(ybarr,s,b.inf,b.sup,incl)
+tram.donnee <- cbind(ybar,s,b.inf,b.sup,incl)
 head(tram.donnee,5)
 
 ```
 
-$\text{4.d : Verifions numeriquement que} \ \mu_{\bar{y}}=\bar{y_{\mu}} \ \text{et que} \sigma_{\bar{y}}=(\sqrt{1-f})\frac{S}{n}$
+$\textbf{4.d : Verifions numeriquement que} \ \mu_{\bar{y}}=\bar{y_{\mu}} \ \textbf{et que} \sigma_{\bar{y}}=(\sqrt{1-f})\frac{S}{n}$
 
 ```{r}
 # moyenne de chaque population a 3 echantillons
@@ -148,11 +148,12 @@ muybarr <- mean(tram.donnee[,1])
 muybarr
 ybarru
 f <- n / N
-head(sqrt(1 - f) * (s / sqrt(n)),5)
-head(sqrt(sybarr),5)
+head(sqrt(1 - f) * (S / sqrt(n)),5)
+sygmaybarr <- sqrt(sigmacarre / n)
+sygmaybarr
 ```
 
-$\text{4.e : s est - il un estimateur sans biais de S}$
+$\textbf{4.e : s est - il un estimateur sans biais de S}$
 
   
 ```{r}
@@ -166,7 +167,7 @@ D'apres la figure on observe que l'esperance de s ne converge pas vers la valeur
 Donc s n'est pas un estimateur sans biais  de S.
 
 
-$\text{f. Déterminer la probabilité de commettre dans l’estimation de la moyenne une erreur}$
+$\textbf{f. Déterminer la probabilité de commettre dans l’estimation de la moyenne une erreur}$
 
 - plus de deux unités
 
@@ -174,7 +175,7 @@ On compte toutes les indices du vecteurs ybar dont leurs valeurs sont superieur 
 
 
 ```{r}
-length(which(ybarr > ybarru + 2 )) / size
+length(which(ybar > ybarru + 2 )) / size
 ```
 
 - plus de cinq unités
@@ -183,7 +184,7 @@ On compte toutes les indices du vecteurs ybar  dont leurs valeurs sont superieur
 
 
 ```{r}
-length(which(ybarr > ybarru + 5 )) / size
+length(which(ybar > ybarru + 5 )) / size
 ```
 
 - plus de $25\%$
@@ -191,25 +192,48 @@ length(which(ybarr > ybarru + 5 )) / size
 On compte toutes les indices du vecteurs ybar  dont leurs valeurs sont superieur a $\bar{y_{u}}+0.25$ puis on divise par le nombre d'element du vecteur ybar pour avoir la probabilité.
 
 ```{r}
-length(which(ybarr > ybarru + 0.25 )) / size
+length(which(ybar > ybarru + 0.25 )) / size
 ```
 
 
-g. Calcul de la probabilité de se tromper de plus de $20\%$ dans l’estimation de l’écart type S de la population.
+**g. Calcul de la probabilité de se tromper de plus de $20\%$ dans l’estimation de l’écart type S de la population**.
 
 ```{r}
 length(which(s > S + 0.20 )) / size
 ```
 
-h.Le niveau de confiance de l’intervalle de confiance donné par la formule
-$\bar{y}-2\widehat{\sigma}_{\bar{y}}\leq \bar{y}_{u}\leq \bar{y}+3\widehat{\sigma}_{\bar{y}}$
+**h.Le niveau de confiance de l’intervalle de confiance donné par la formule**
 
-On compte le nombre d'element de $\bar{y}-2\widehat{\sigma}_{\bar{y}}$ et  $\bar{y}+3\widehat{\sigma}_{\bar{y}}$ dont $\bar{y}-2\widehat{\sigma}_{\bar{y}} \leq \bar{y}_{u} \leq \bar{y}+3\widehat{\sigma}_{\bar{y}}$ 
+$\bar{y}-2\widehat{\sigma}_{\bar{y}}\leq \bar{y}_{u}\leq \bar{y}+2\widehat{\sigma}_{\bar{y}}$
+
+On compte le nombre d'element de $\bar{y}-2\widehat{\sigma}_{\bar{y}}$ et  $\bar{y}+2\widehat{\sigma}_{\bar{y}}$ dont $\bar{y}-2\widehat{\sigma}_{\bar{y}} \leq \bar{y}_{u} \leq \bar{y}+2\widehat{\sigma}_{\bar{y}}$ 
 
 ```{r}
-born.inf <- ybarr - (2 * sqrt(sybarr))
-born.sup <- ybarr + (3 * sqrt(sybarr))
+born.inf <- ybar - (2 * sqrt(sigmachapeau.ybar))
+born.sup <- ybar + (2 * sqrt(sigmachapeau.ybar))
 length(which(ybarru >= born.inf & ybarru <= born.sup)) / size
 ```
 
+Donc le niveau de confiance de cette intervall est de $89.28\%$
+
+**i.Le niveau de confiance de l’intervalle de confiance donné par la formule**
+
+$\bar{y}-3\widehat{\sigma}_{\bar{y}}\leq \bar{y}_{u}\leq \bar{y}+3\widehat{\sigma}_{\bar{y}}$
+
+```{r}
+born.inf <- ybar - (3 * sqrt(sigmachapeau.ybar))
+born.sup <- ybar + (3 * sqrt(sigmachapeau.ybar))
+length(which(ybarru >= born.inf & ybarru <= born.sup)) / size
+```
 Donc le niveau de confiance de cette intervall est de $92.86\%$
+
+**j.Le niveau de confiance de l’intervalle de confiance donné par la formule**
+
+$\bar{y}-2\sigma_{\bar{y}}\leq \bar{y}_{u}\leq \bar{y}+2\sigma_{\bar{y}}$
+
+```{r}
+born.inf <- ybar - (2 * sygmaybarr)
+born.sup <- ybar + (2 * sygmaybarr)
+length(which(ybarru >= born.inf & ybarru <= born.sup)) / size
+```
+
