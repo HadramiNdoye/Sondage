@@ -149,7 +149,7 @@ muybarr
 ybarru
 f <- n / N
 head(sqrt(1 - f) * (S / sqrt(n)),5)
-sygmaybarr <- sqrt(sigmacarre / n)
+sygmaybarr <- sqrt((1 - (n / N)) * (S^2 / n))
 sygmaybarr
 ```
 
@@ -237,3 +237,4 @@ born.sup <- ybar + (2 * sygmaybarr)
 length(which(ybarru >= born.inf & ybarru <= born.sup)) / size
 ```
 
+Donc le niveau de confiance de cette intervall est de $92.86\%$
