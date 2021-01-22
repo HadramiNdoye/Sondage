@@ -24,7 +24,7 @@ library(tinytex)
 source("scriptsEtud.R")
 ```
 
-$\underline{\text{Estimation d’une proportion dans le contexte d’une question délicate}}$
+$\underline{\textbf{Estimation d’une proportion dans le contexte d’une question délicate}}$
 
 ```{r}
 n <- 500
@@ -43,6 +43,7 @@ $\textbf{Question 1 . Simulation 1000 fois de la methode 1}$
 
 On sait que la moyenne estimée correspond à l’espérance tant-disque l’écart-type estimé correspond à la  racine carré de la variance.
 Ici X suit une loi Binomiale.
+
 Donc $E(X) = a+ b*(n*P)$ et $var = b^2 * (n*P(1-P))$
 
 ```{r}
@@ -220,7 +221,7 @@ head(tram.donnee,5)
 
 ```
 
-### d. Verifions numeriquement que $\mu_{\bar{y}}=\bar{y_{u}}$ et que $\sigma_{\bar{y}}$=($\sqrt{1-f}$)$\frac{S}{n}$
+### d. Verifions numeriquement que $\boldsymbol{\mu_{\bar{y}}=\bar{y_{u}}}$ et que $\boldsymbol{\sigma_{\bar{y}}$=($\sqrt{1-f}$)$\frac{S}{n}}$
 
 ```{r}
 # moyenne de chaque population a 3 echantillons
@@ -354,7 +355,10 @@ varybarr <- var(ybarr)
 varybarr
 (1 / (NE - 1)) * sum((ybarr - mean(ybarr))^2)
 ```
-$\textbf{5.c: Realisation d'un graphique montrant que} \  \boldsymbol{\bar{y}} \ \text{suit une loi normale}$
+
+
+$\textbf{5.c La variable}$ $\boldsymbol{\bar{y}}$ \ $\textbf{suit-elle une loi normale}$:
+
 
 ```{r}
 hist(ybarr,probability = TRUE,xlim = c(min(ybarr),max(ybarr)),ylim = c(0,0.4),col="green",
@@ -362,6 +366,25 @@ hist(ybarr,probability = TRUE,xlim = c(min(ybarr),max(ybarr)),ylim = c(0,0.4),co
 lines(density(ybarr),col="red")
 legend(x=41,y=0.4,c("histogramme","densité"),fill = c("green","red"),col =c("green","red"))
 ```
+
+$\textbf{Test de normalité}$
+
+
+```{r}
+shapiro.test(ybarr)
+```
+
+
+Soient les deux hypothèses suivantes:
+
+$H_{0}:$la variable $\bar{y}$ est une loi normale $\\$
+$H_{a}:$la variable $\bar{y}$ n'est pas une loi normale $\\$
+
+-Décision
+
+le p-value est inférieur a la valeur de alpha fixée ($\alpha=0.05$), donc on rejette $H_{0}$ et on accepte $H_{a}.\\$  Donc $\bar{y}$ n'est pas une loi normale.
+
+
 
 $\textbf{Question d:}$
 
@@ -384,7 +407,7 @@ length(which(ybarru <= b & ybarru >=a)) / NE
 ```
 $\text{Donc la probabilité que l'intervall de confiance qui recouvre la vraie moyenne est de}\ 54.6 \%.$
 
-$\textbf{Question f : Est-ce que vos simulations semblent indiquer que l’estimateur}$ $s^2$ $\text{est sans biais}$ de $S^2$
+$\textbf{Question f : Est-ce que vos simulations semblent indiquer que l’estimateur}$ $\boldsymbol{s^2}$ $\textbf{est sans biais}$ de $\boldsymbol{S^2}$
 
 ```{r}
 secarr <- se^2
