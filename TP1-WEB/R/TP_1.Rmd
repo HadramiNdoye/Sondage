@@ -12,6 +12,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(tinytex)
+```
+
+
 # Exercice 1
 
 ```{r}
@@ -19,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 source("scriptsEtud.R")
 ```
 
-## Estimation d’une proportion dans le contexte d’une question délicate
+$\underline{\text{Estimation d’une proportion dans le contexte d’une question délicate}}$
 
 ```{r}
 n <- 500
@@ -31,11 +36,12 @@ piaw <- questDelicateMeth1(n,P,theta,n.sim)
 ```
 
 
-## 1. Considérez un acte illégal commis par 10$\%$ de la population ($\pi$ A = 1/10). Si tous les répondants répondent honnêtement, simuler 1 000 fois la méthode 1 avec n = 500 et $\theta$ = 0,8.
+$\textbf{Question 1 . Simulation 1000 fois de la methode 1}$
 
-### a. Calcul de la moyenne et l'ecart type estimés
+\textbf{a. Calcul de la moyenne et l'ecart type estimés}
 
-On sait que la moyenne estimée correspond à l’espérance tant-disque l’écart-type estimé correspond à la racine carré de la variance.
+
+On sait que la moyenne estimée correspsecarreond à l’espsecarreérance tant-disque l’écart-type estimé correspsecarreond à la racine carré de la variance.
 Ici X suit une loi Binomiale.
 Donc E(X) = a+ b*(n*P) et var = b^2 * (n*P(1-P))
 
@@ -53,7 +59,7 @@ varX1 <- n * probaoui1 * (1 - probaoui1)
 ecarttype1 <- sqrt(b^2 * varX1)
 ```
 
-### b. Les valeurs theoriques correspondantes
+$\textbf{b. Les valeurs theoriques correspondantes}$
 
 ```{r}
 # moyenne
@@ -62,27 +68,30 @@ mean(piaw)
 sd(piaw)
 ```
 
-### c. Comment se compare la variance de cette méthode avec celle où l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement ?
+$\textbf{c. Comment se compare la variance de cette méthode avec celle,\\
+ou l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
 
 Dans le cas où tous les repondants repondent honêtement, la variance serait inférieur à celle de la méthode precedente.
 
-### d. Tracé d'un histogramme des valeurs observées de $\theta$AW
+$\textbf{d. Tracé d'un histogramme des valeurs observées de} \ \boldsymbol{\widehat{\pi}_{AW}}$
+
+
 ```{r}
 hist(piaw,probability = TRUE,col = "blue")
 ```
 
-### e. Commentaires
+$\textbf{e. Commentaires}$
 
 
 
-## 2. Reprise du travail avec la méthode 2 en utilisant $\alpha$ = 0, 217. Pour ce faire, la questDelicateMeth2 est disponible
+$\textbf{2. Reprise du travail avec la méthode 2 en utilisant} \  \boldsymbol{\alpha = 0.217}$
 
 ```{r}
 alpha <- 0.217
 pia <- questDelicateMeth2(n, P, theta, alpha, n.sim)
 ```
 
-### a. Calcul de la moyenne et l'ecart type estimés
+$\textbf{a. Calcul de la moyenne et l'ecart type estimés}$
 
 ```{r}
 probaoui2 <- (theta * P) + ((1 - theta) * alpha) 
@@ -96,7 +105,7 @@ varX2 <- n * probaoui2 * (1 - probaoui2)
 ecarttype2 <- sqrt((1 / (n * theta)^2) * varX2)
 ```
 
-### b. Les valeurs theoriques correspondantes
+$\textbf{b. Les valeurs theoriques correspsecarreondantes}$
 
 ```{r}
 # moyenne
@@ -105,18 +114,20 @@ mean(pia)
 sd(pia)
 ```
 
-### c. Comment se compare la variance de cette méthode avec celle où l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement ?
+$\textbf{c. Comment se compare la variance de cette méthode avec celle où,} \\ \textbf{l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
 
 
 
-### d. Tracé d'un histogramme des valeurs observées de $\theta$AW
+ $\textbf{d. Tracage d'un histogramme des valeurs observées} \ de \  \boldsymbol{\widehat{\pi}_{AW}}$
+
 
 ```{r}
 hist(pia,probability = TRUE,col = "red")
 ```
 
-## 3. Évaluons les différentes EQM
-- Pour p.neg = 0
+$\textbf{3. Évaluons les différentes EQM}$
+
+- Pour p.neg = 0}
 ```{r}
 # méthode 1
 varX1 + (moyenneEst1 - theta)
@@ -137,9 +148,9 @@ varX2 + (moyenneEst2 - theta)
 
 
 
-## 4. Échantillonnage classique
+$\textbf{Question 4 . Échantillonnage classique}$
 
-### a. Calcul de $\bar{y}_{u}$ et  S pour la population
+$\textbf{a. Calcul de} \  \boldsymbol{\bar{y}_{u}} \  \textbf{et  S pour la population}$
 
 ```{r}
 source("Script2.R")
@@ -186,7 +197,7 @@ head(tram.donnee,5)
 
 ```
 
-### d. Verifions numeriquement que $\mu_{\bar{y}}=\bar{y_{\mu}}$ et que $\sigma_{\bar{y}}$=($\sqrt{1-f}$)$\frac{S}{n}$
+### d. Verifions numeriquement que $\mu_{\bar{y}}=\bar{y_{u}}$ et que $\sigma_{\bar{y}}$=($\sqrt{1-f}$)$\frac{S}{n}$
 
 ```{r}
 # moyenne de chaque population a 3 echantillons
@@ -204,12 +215,12 @@ sygmaybarr
   
 ```{r}
 esp <- cumsum(tram.donnee[,2]) / (1:size)
-plot(esp,xlim = c(min(esp),max(esp)),type = "l",col="blue",main = "Esperance de S / s")
+plot(esp,xlim = c(min(esp),max(esp)),type = "l",col="blue",main = "esperance de S / s")
 abline(h = S,col="red")
-legend(x = 18,y = 14,legend=c("Esperence de s","Valeur de S"),fill = c("blue","red"),col=c("blue,red"))
+legend(x = 18,y = 14,legend=c("esperance de s","Valeur de S"),fill = c("blue","red"),col=c("blue,red"))
 ```
 
-D’après la figure on observe que l’espérance de s ne converge pas vers la valeur de S.
+D’après la figure on observe que l’esperance  de s ne converge pas vers la valeur de S.
 Donc s n'est pas un estimateur sans biais  de S.
 
 
@@ -284,3 +295,101 @@ length(which(ybarru >= born.inf & ybarru <= born.sup)) / size
 ```
 
 Donc le niveau de confiance de cette intervall est de $92.86\%$
+
+$\textbf{5.a: Dans quelle mesure nos simulations confirment-elles que} \ \boldsymbol{\bar{y}},\\ \textbf{est un estimateur sans biais de} \ \boldsymbol{\bar{y}_{u}}$
+
+```{r}
+# Realisation d'un script creant un echantillon de taille 5 1000 fois
+y <- c (36 , 36.5 , 37 , 37.5 , 38 , 38.5 , 39 , 39.5 , 
+        40 , 40.5,41 ,41.5 , 42 , 42.5 , 43 , 
+        43.5 , 44 , 44.5 , 45 , 45.5 , 46 ,46.5)
+e <- c (0.02 , 0.03 , 0.04 , 0.06 , 0.10 , 0.12 , 0.13 , 0.10 , 0.07 , 0.05 , 
+        0.05 , 0.04 , 0.04, 
+        0.03 , 0.03 , 0.02 , 0.02 , 0.01 , 0.01 , 0.01 , 0.01 ,  0.01)
+# Taille de l'echantillon
+NE <- 1000
+ne <- 5
+echt <- matrix(rep(NA,NE),nrow = NE,ncol = ne)
+set.seed(2001)
+for (i in 1:NE){
+  echt[i,] <- sample (y ,ne , replace = TRUE , prob = e )
+}
+ybarr <- apply(echt, 1,mean)
+mean(ybarr)
+ybarru <- mean(y)
+ybarru
+```
+
+Apres avoir simuler 1000 fois des echantillons de taille 5 on constate que $\bar{y}$ est un estimateur sans biais de $\bar{y}_{u}$ a partir de la mesure 40.
+
+$\textbf{5.b Calcule de  la variance des} \ \boldsymbol{\bar{y}} \ \textbf{Théoriquement,
+que devrait être cette variance}?,\\ \textbf{Énoncons le théorème qui justifie notre reponse}$
+
+```{r}
+varybarr <- var(ybarr)
+varybarr
+(1 / (NE - 1)) * sum((ybarr - mean(ybarr))^2)
+```
+$\textbf{5.c: Realisation d'un graphique montrant que} \  \boldsymbol{\bar{y}} \ \text{suit une loi normale}$
+
+```{r}
+hist(ybarr,probability = TRUE,xlim = c(min(ybarr),max(ybarr)),ylim = c(0,0.4),col="green",
+     main="histogramme /densité")
+lines(density(ybarr),col="red")
+legend(x=41,y=0.4,c("histogramme","densité"),fill = c("green","red"),col =c("green","red"))
+```
+
+$\textbf{Question d:}$
+
+
+```{r}
+# calcul de sigma y bar
+sycarr <- (1 / length(y)) * sum((y - ybarru)^2)
+sigmaybar <- sqrt(sycarr / ne)
+length(which(ybarr > 1.96 * sd(ybarr))) / NE
+```
+
+$\text{e.La probabalité de recouvrement de l'intervalle de confiance}$
+
+
+```{r}
+se <- apply(echt,1,sd)
+a <- ybarr - (1.96 * (se / sqrt(ne)))
+b <- ybarr + (1.96 * (se / sqrt(ne)))
+length(which(ybarru <= b & ybarru >=a)) / NE
+```
+$\text{Donc la probabilité que l'intervall de confiance qui recouvre la vraie moyenne est de}\ 54.6 \%.$
+
+$\textbf{Question f : Est-ce que vos simulations semblent indiquer que l’estimateur}$ $s^2$ $\text{est sans biais}$ de $S^2$
+
+```{r}
+secarr <- se^2
+sizey <- length(y)
+# calcul de S^2
+S.carre <- (1 / (sizey - 1)) * sum((y - mean(y))^2)
+espsecarre <- cumsum(secarr / (1:length(secarr)))
+plot(espsecarre,xlim = c(min(espsecarre),max(espsecarre)),type = "l",
+     col="blue",main = "espsecarreerance de S / s")
+abline(h = S.carre,col="red")
+legend(x = 18,y = 40,legend=c("espsecarreerence de s^2","Valeur de S^2"),
+       fill = c("blue","red"),col=c("blue,red"))
+```
+
+D’après la figure on observe que l’esperance  de $s^2$ ne converge pas vers la valeur de $S^2$.
+Donc  $s^2$ n'est pas un estimateur sans biais  de  $S^2$.
+
+
+\textbf{Question g:La théorie statistique indique que dans certaines conditions l’intervalle de confiance
+calculé par la formule}
+
+$$\frac{(n-1)*s^2}{\chi^2_{\alpha/2;n-1}}<S^2<\frac{(n-1)*s^2}{\chi^2_{1-\alpha/2;n-1}}$$
+est un intervalle de confiance à $95\%$. Estimons le niveau réel de cet intervalle de
+confiance.
+
+```{r}
+alhaseuil <- 0.05
+bsup <- ((ne - 1) * secarr) / qchisq(alhaseuil/2,ne - 1)
+binf<- ((ne - 1) * secarr) / qchisq(1-(alhaseuil / 2),ne - 1)
+length(which(S.carre < bsup & S.carre > binf)) / NE
+```
+Le niveau reel de cet intervall de confiance est de $86.6\%$.
