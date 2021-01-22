@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,message = FALSE, warning = FALSE)
 ```
 
 ```{r}
@@ -41,9 +41,9 @@ $\textbf{Question 1 . Simulation 1000 fois de la methode 1}$
 \textbf{a. Calcul de la moyenne et l'ecart type estimés}
 
 
-On sait que la moyenne estimée correspsecarreond à l’espsecarreérance tant-disque l’écart-type estimé correspsecarreond à la racine carré de la variance.
+On sait que la moyenne estimée correspond à l’espérance tant-disque l’écart-type estimé correspond à la  racine carré de la variance.
 Ici X suit une loi Binomiale.
-Donc E(X) = a+ b*(n*P) et var = b^2 * (n*P(1-P))
+Donc $E(X) = a+ b*(n*P)$ et $var = b^2 * (n*P(1-P))$
 
 ```{r}
 probaoui1 <- P * (2 * theta - 1) - theta + 1
@@ -54,9 +54,11 @@ b <- 1 / (n * ((2 * theta) - 1))
 
 # Moyenne estimée
 moyenneEst1 <- a + (b * n * probaoui1)
+moyenneEst1
 # Ecart type estimé
 varX1 <- n * probaoui1 * (1 - probaoui1)
 ecarttype1 <- sqrt(b^2 * varX1)
+ecarttype1
 ```
 
 $\textbf{b. Les valeurs theoriques correspondantes}$
@@ -68,8 +70,8 @@ mean(piaw)
 sd(piaw)
 ```
 
-$\textbf{c. Comment se compare la variance de cette méthode avec celle,\\
-ou l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
+$\textbf{c. Comment se compare la variance de cette méthode avec celle,}\\$
+$\textbf{ou l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
 
 Dans le cas où tous les repondants repondent honêtement, la variance serait inférieur à celle de la méthode precedente.
 
@@ -82,7 +84,8 @@ hist(piaw,probability = TRUE,col = "blue")
 
 $\textbf{e. Commentaires}$
 
-
+Après les différents calculs, on remarque la moyenne estimée et la l’écart-type estimé sont respectivement égaux à la moyenne théorique et l’écart-type théorique. Aussi on trouve que les estimateurs sont sans biais. Pour finir à travers l’histogramme, on voit que la distribution suit une loi normale.
+\newline 
 
 $\textbf{2. Reprise du travail avec la méthode 2 en utilisant} \  \boldsymbol{\alpha = 0.217}$
 
@@ -100,9 +103,11 @@ b <- 1 / (n * theta)
 
 # Moyenne estimée
 moyenneEst2 <- a + (b * n * probaoui2)
+moyenneEst2
 # Ecart type estimé
 varX2 <- n * probaoui2 * (1 - probaoui2)
 ecarttype2 <- sqrt((1 / (n * theta)^2) * varX2)
+ecarttype2
 ```
 
 $\textbf{b. Les valeurs theoriques correspsecarreondantes}$
@@ -114,9 +119,9 @@ mean(pia)
 sd(pia)
 ```
 
-$\textbf{c. Comment se compare la variance de cette méthode avec celle où,} \\ \textbf{l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
+$\textbf{c. Comment se compare la variance de cette méthode avec celle où,}\\$ \textbf{l’on poserait directement la question dans le contexte où tous les répondants répondent honnêtement}$?
 
-
+Dans le cas où tous les repondants repondent honêtement, la variance serait inférieur à celle de la méthode precedente.
 
  $\textbf{d. Tracage d'un histogramme des valeurs observées} \ de \  \boldsymbol{\widehat{\pi}_{AW}}$
 
@@ -127,22 +132,39 @@ hist(pia,probability = TRUE,col = "red")
 
 $\textbf{3. Évaluons les différentes EQM}$
 
-- Pour p.neg = 0}
 ```{r}
-# méthode 1
-varX1 + (moyenneEst1 - theta)
-# méthode 1
-varX2 + (moyenneEst2 - theta)
+# méthode (b)
+EQM1 <- varX2 + (moyenneEst2 - theta)
+EQM1
 ```
 
-- Pour p.neg = 0.1
+Calculons de $\widehat{\pi}_{AW}$
 ```{r}
+prop <- c(0, 0.1, 0.2, 0.3)
+prob <- 1 - prop
+prob
+set.seed(2001)
+piaw1 <- rep(0,4)
+piaw1
+for (i in 1:4) {
+  piaw1[i] <- questDelicateMeth1(n,prob[i],theta,n.sim)
+}
+piaw1
 
+# calcul de la moyenne estimée et de le variance estimé 
+
+# Moyenne estimée
+moyenEst <- mean(piaw1)
+moyenEst
+# Ecart type estimé
+var1 <- var(piaw1)
+var1
+
+EQM2 <- var1 + (moyenEst - theta)
+EQM2
 ```
 
-- Pour p.neg = 0.2
-- Pour p.neg = 0.3
-.
+La méthode (a) a une EQM plus petite que celle de la méthode (b).
 \newline
 \newline 
 
@@ -174,7 +196,8 @@ pop <- c (3 , 6 , 24 , 27 , 30 , 36 , 51 , 57)
 N <- length ( pop )
 n <- 3
 (n.ech <- choose (N , n))
-ech.all <- cbind ( choix <- t ( matrix ( combn (1: N , n ) ,n , n.ech ) ) ,( matrix (pop [ choix ] , n.ech , n ) ) )
+ech.all <- cbind ( choix <- t ( matrix ( combn (1: N , n ) ,n , n.ech ) ) ,
+                   ( matrix (pop [ choix ] , n.ech , n ) ) )
 head (ech.all)
 donneepop <- ech.all[,4:6]
 ybar <- apply(donneepop,1,mean)
@@ -217,7 +240,8 @@ sygmaybarr
 esp <- cumsum(tram.donnee[,2]) / (1:size)
 plot(esp,xlim = c(min(esp),max(esp)),type = "l",col="blue",main = "esperance de S / s")
 abline(h = S,col="red")
-legend(x = 18,y = 14,legend=c("esperance de s","Valeur de S"),fill = c("blue","red"),col=c("blue,red"))
+legend(x = 18,y = 14,legend=c("esperance de s","Valeur de S"),fill = c("blue","red"),
+       col=c("blue,red"))
 ```
 
 D’après la figure on observe que l’esperance  de s ne converge pas vers la valeur de S.
