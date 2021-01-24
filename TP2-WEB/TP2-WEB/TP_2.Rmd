@@ -9,28 +9,150 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r}
 source("TP2Etudiant.R")
 ```
 
-$\textbf{Question 1:}$
+**(a) : Déterminons les probabilités d’inclusion du premier et du second ordre pour ces deux plans de sondages.**
+
+$\underline{\textbf{Plan1}}$
+
+- Probabilité d'inclusion du premier ordre
 
 ```{r}
+n <- 3
+N <- 6
 x <- plan1[,1:3]
 k <- c(1:6)
-sizek <- 8
-appartennace <- matrix(rep(NA,sizek * 6),nrow = length(k) ,ncol=sizek)
-  for (i in 1:sizek){
-    for(j in 1:6){
-        appartennace[j,i] <- un_dedans(x[i,],k[j])
+# nombre d'echantillons
+sizeech <- nrow(plan1)
+appartenancepik <- matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
+rownames(appartenancepik) <- paste("k=",k)
+colnames(appartenancepik) <- paste("echantillon",1:sizeech)
+pik <-  matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
+rownames(pik) <- paste("k=",k)
+colnames(pik) <- paste("echantillon",1:sizeech)
+  for (i in 1:sizeech){
+    for(j in 1:N){
+        appartenancepik[j,i] <- un_dedans(x[i,],k[j])
+        appartenancepik[appartenancepik==TRUE] <- 1
+        appartenancepik[appartenancepik==FALSE] <- 0
+        pik[j,i] <- round(appartenancepik[j,i] / n,2)
     }
+  
   }
-# probabilité de chaque k
-NT <- length(appartennace)
-prob <- rep(NA,length(k))
-for (i in 1:length(k)){
-  prob[i] <- length(appartennace[i,]) / NT
-}
+  head(appartenancepik,4)
+  head(pik,4)
 ```
+
+- Probabilité d'inclusion du second ordre
+
+```{r}
+sizek <- choose(N,2)
+# couple i,jech
+coupleij <- t(combn(k,2))
+appartenancepikl <- matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
+rownames(appartenancepikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+colnames(appartenancepikl) <- paste("echantillon",1:sizeech)
+pikl <-  matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
+rownames(pikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+colnames(pikl) <- paste("echantillon",1:sizeech)
+  for (i in 1:sizek){
+    for(j in 1:sizeech){
+        appartenancepikl[i,j] <- deux_dedans(x[j,],coupleij[i,1],coupleij[i,2])
+        appartenancepikl[appartenancepikl==TRUE] <- 1
+        appartenancepikl[appartenancepikl==FALSE] <- 0
+        pikl[i,j] <- round(appartenancepikl[i,j] / n,2)
+    }
+   
+    
+  }
+ head(appartenancepikl,4)
+ head(pikl,4)
+```
+
+$\underline{\textbf{Plan2}}$
+
+
+- Probabilité d'inclusion du premier ordre
+
+```{r}
+ind <- plan2[,1:3]
+sizeind <- nrow(ind)
+appartenancepikp2 <- matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
+rownames(appartenancepikp2) <- paste("k=",k)
+colnames(appartenancepikp2) <- paste("echantillon",1:sizeind)
+pikp2 <-  matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
+rownames(pikp2) <- paste("k=",k)
+colnames(pikp2) <- paste("echantillon",1:sizeind)
+  for (i in 1:sizeind){
+    for(j in 1:N){
+        appartenancepikp2[j,i] <- un_dedans(ind[i,],k[j])
+        appartenancepikp2[appartenancepikp2==TRUE] <- 1
+        appartenancepikp2[appartenancepikp2==FALSE] <- 0
+        pikp2[j,i] <- round(appartenancepikp2[j,i] / n,2)
+    }
+  
+  }
+  head(appartenancepikp2,4)
+  head(pikp2,4)
+```
+
+- Probabilité d'inclusion du second ordre
+
+```{r}
+appartenancepiklp2 <- matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
+rownames(appartenancepiklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+colnames(appartenancepiklp2) <- paste("echantillon",1:sizeind)
+piklp2<-  matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
+rownames(piklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+colnames(piklp2) <- paste("echantillon",1:sizeind)
+  for (i in 1:sizek){
+    for(j in 1:sizeind){
+        appartenancepiklp2[i,j] <- deux_dedans(ind[j,],coupleij[i,1],coupleij[i,2])
+        appartenancepiklp2[appartenancepiklp2==TRUE] <- 1
+        appartenancepiklp2[appartenancepiklp2==FALSE] <- 0
+        piklp2[i,j] <- round(appartenancepiklp2[i,j] / n,2)
+    }
+   
+    
+  }
+ head(appartenancepiklp2,4)
+ head(piklp2,4)
+```
+
+
+**(b): La valeur de** $\boldsymbol{\bar{y_{u}}}$
+
+```{r}
+y <- c(98,102,154,133,190,175)
+ybaru <- mean(y)
+ybaru
+```
+
+**(c) Soit** $\boldsymbol{\bar{y}}$ **la moyenne des valeurs de l’échantillon. Pour chacun des plans trouvons**
+
+**i.** $\boldsymbol{E[\bar{y}]}:$
+
+```{r}
+# Moyenne de chaque echantillon du plan p1 
+meanechtp1 <- rep(NA,sizeech)
+for (i in 1:sizeech){
+  meanechtp1[i] <- mean(y[x[i,]])
+}
+meanechtp1
+# Moyenne de chaque echantillon du plan p1 
+meanechtp2 <- rep(NA,sizeind)
+for (i in 1:sizeind){
+  meanechtp2[i] <- mean(y[ind[i,]])
+}
+meanechtp2
+probp1 <- plan1[,4]
+espybarp1 <- sum(probp1 * meanechtp1)
+espybarp1
+varybarp1 <- sum(meanechtp1^2*probp1) - espybarp1^2
+varybarp1
+```
+
+
 
