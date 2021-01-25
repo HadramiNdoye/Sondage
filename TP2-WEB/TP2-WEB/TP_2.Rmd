@@ -13,6 +13,14 @@ knitr::opts_chunk$set(echo = TRUE)
 source("TP2Etudiant.R")
 ```
 
+## EXERCICE
+
+$1.\ $ Soit $N = 6$ et $n = 3$. Afin d’étudier les distributions des estimateurs, nous supposons
+connues les valeurs pour toute la population :
+
+$$y_{1} = 98 \ \ y_{3} = 154 \ \  y_{5} = 190$$
+$$y_{2} = 102 \ \ y_{4} = 133 \ \ y_{6} = 175$$
+
 **(a) : Déterminons les probabilités d’inclusion du premier et du second ordre pour ces deux plans de sondages.**
 
 $\underline{\textbf{Plan1}}$
@@ -28,10 +36,10 @@ k <- c(1:6)
 sizeech <- nrow(plan1)
 appartenancepik <- matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
 rownames(appartenancepik) <- paste("k=",k)
-colnames(appartenancepik) <- paste("echantillon",1:sizeech)
+colnames(appartenancepik) <- paste("ech",1:sizeech)
 pik <-  matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
 rownames(pik) <- paste("k=",k)
-colnames(pik) <- paste("echantillon",1:sizeech)
+colnames(pik) <- paste("ech",1:sizeech)
   for (i in 1:sizeech){
     for(j in 1:N){
         appartenancepik[j,i] <- un_dedans(x[i,],k[j])
@@ -41,8 +49,8 @@ colnames(pik) <- paste("echantillon",1:sizeech)
     }
   
   }
-  head(appartenancepik,4)
-  head(pik,4)
+  head(appartenancepik,6)
+  head(pik,6)
 ```
 
 - Probabilité d'inclusion du second ordre
@@ -53,10 +61,10 @@ sizek <- choose(N,2)
 coupleij <- t(combn(k,2))
 appartenancepikl <- matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
 rownames(appartenancepikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(appartenancepikl) <- paste("echantillon",1:sizeech)
+colnames(appartenancepikl) <- paste("ech",1:sizeech)
 pikl <-  matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
 rownames(pikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(pikl) <- paste("echantillon",1:sizeech)
+colnames(pikl) <- paste("ech",1:sizeech)
   for (i in 1:sizek){
     for(j in 1:sizeech){
         appartenancepikl[i,j] <- deux_dedans(x[j,],coupleij[i,1],coupleij[i,2])
@@ -67,8 +75,8 @@ colnames(pikl) <- paste("echantillon",1:sizeech)
    
     
   }
- head(appartenancepikl,4)
- head(pikl,4)
+ head(appartenancepikl,6)
+ head(pikl,6)
 ```
 
 $\underline{\textbf{Plan2}}$
@@ -81,10 +89,10 @@ ind <- plan2[,1:3]
 sizeind <- nrow(ind)
 appartenancepikp2 <- matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
 rownames(appartenancepikp2) <- paste("k=",k)
-colnames(appartenancepikp2) <- paste("echantillon",1:sizeind)
+colnames(appartenancepikp2) <- paste("ech",1:sizeind)
 pikp2 <-  matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
 rownames(pikp2) <- paste("k=",k)
-colnames(pikp2) <- paste("echantillon",1:sizeind)
+colnames(pikp2) <- paste("ech",1:sizeind)
   for (i in 1:sizeind){
     for(j in 1:N){
         appartenancepikp2[j,i] <- un_dedans(ind[i,],k[j])
@@ -94,8 +102,8 @@ colnames(pikp2) <- paste("echantillon",1:sizeind)
     }
   
   }
-  head(appartenancepikp2,4)
-  head(pikp2,4)
+  head(appartenancepikp2,6)
+  head(pikp2,6)
 ```
 
 - Probabilité d'inclusion du second ordre
@@ -103,10 +111,10 @@ colnames(pikp2) <- paste("echantillon",1:sizeind)
 ```{r}
 appartenancepiklp2 <- matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
 rownames(appartenancepiklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(appartenancepiklp2) <- paste("echantillon",1:sizeind)
+colnames(appartenancepiklp2) <- paste("ech",1:sizeind)
 piklp2<-  matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
 rownames(piklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(piklp2) <- paste("echantillon",1:sizeind)
+colnames(piklp2) <- paste("ech",1:sizeind)
   for (i in 1:sizek){
     for(j in 1:sizeind){
         appartenancepiklp2[i,j] <- deux_dedans(ind[j,],coupleij[i,1],coupleij[i,2])
@@ -117,8 +125,8 @@ colnames(piklp2) <- paste("echantillon",1:sizeind)
    
     
   }
- head(appartenancepiklp2,4)
- head(piklp2,4)
+ head(appartenancepiklp2,6)
+ head(piklp2,6)
 ```
 
 
@@ -126,13 +134,15 @@ colnames(piklp2) <- paste("echantillon",1:sizeind)
 
 ```{r}
 y <- c(98,102,154,133,190,175)
-ybaru <- mean(y)
-ybaru
+ybarmu <- mean(y)
+ybarmu
 ```
 
 **(c) Soit** $\boldsymbol{\bar{y}}$ **la moyenne des valeurs de l’échantillon. Pour chacun des plans trouvons**
 
-**i.** $\boldsymbol{E[\bar{y}]}:$
+**Plan1**
+
+**i.** $\textbf{E}[\boldsymbol{\bar{y}}]:$
 
 ```{r}
 # Moyenne de chaque echantillon du plan p1 
@@ -150,9 +160,90 @@ meanechtp2
 probp1 <- plan1[,4]
 espybarp1 <- sum(probp1 * meanechtp1)
 espybarp1
+```
+
+**ii.** $\textbf{V}[\boldsymbol{\bar{y}}]:$
+
+Formule de la variance
+
+$\text{V}[\bar{y}]=E[\bar{y^2}]-\text{E}[\bar{y}]^2$
+
+```{r}
 varybarp1 <- sum(meanechtp1^2*probp1) - espybarp1^2
 varybarp1
 ```
 
+**iii.**$\textbf{Biais}[\boldsymbol{\bar{y}}]:$
+
+$\text{Biais}[\bar{y}]=\text{E}[\bar{y}] - \bar{y}_{\mu}$
 
 
+```{r}
+biaisybarp1 <- espybarp1 - ybarmu
+biaisybarp1
+```
+
+**iiv.**$\textbf{EQM}[\boldsymbol{\bar{y}}]:$
+
+Comme le biais est nul donc $\text{EQM}[\bar{y}]=\text{V}[\bar{y}]$
+
+```{r}
+eqmybarp1 <- varybarp1
+```
+
+**Plan2**
+
+**i.** $\textbf{E}[\boldsymbol{\bar{y}}]:$
+
+```{r}
+probp2 <- plan2[,4]
+espybarp2 <- sum(probp2 * meanechtp2)
+espybarp2
+```
+
+**ii.** $\textbf{V}[\boldsymbol{\bar{y}}]:$
+
+```{r}
+varybarp2 <- sum(meanechtp2^2*probp2) - espybarp2^2
+varybarp2
+```
+
+**iii.**$\textbf{Biais}[\boldsymbol{\bar{y}}]:$
+
+```{r}
+biaisybarp2 <- espybarp2 - ybarmu
+biaisybarp2
+```
+
+**iiv.**$\textbf{EQM}[\boldsymbol{\bar{y}}]:$
+
+```{r}
+eqmybarp2 <- varybarp2 - biaisybarp2^2
+eqmybarp2
+```
+
+**(d)Lequel des plans est le meilleur ? Pourquoi ?**
+
+Le plan2 est le meilleur car il minimise le EQM
+
+$2. \ $ Pour la population utilisée comme exemple en classe, formée de $8$ individus.
+
+$$U=\{1, 2, 3, 4, 5, 6, 7, 8\}$$
+**(a) Déterminons la probabilité de sélection $\boldsymbol{\pi_{i}}$ , pour chaque unité $\boldsymbol{i}$. **
+
+Le nombre total des individus est de 8.
+Donc la probabilité de selectionnée chaque individu est de $\frac{1}{8}$
+
+$$\boxed{\pi_{i}=\frac{1}{8}}$$
+**(b) Quelle est dans ce contexte la distribution de $\boldsymbol{\widehat{t}=8\bar{y}}$ ?**
+
+```{r}
+# extraction des echantillons
+echtp3 <- plan[,1:4]
+meanechtp3 <- apply(echtp3,1,mean)
+tchap <- 8 * meanechtp3
+hist(tchap,probability = TRUE)
+shapiro.test(tchap)
+```
+
+Le test de normalité donne un p-value > 0.05 donc la distrubition de $\widehat{t}$ est une loi normale.
