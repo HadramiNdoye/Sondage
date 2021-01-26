@@ -20,6 +20,61 @@ connues les valeurs pour toute la population :
 
 $$y_{1} = 98 \ \ y_{3} = 154 \ \  y_{5} = 190$$
 $$y_{2} = 102 \ \ y_{4} = 133 \ \ y_{6} = 175$$
+**Creations de deux fonctions un_dedansp et deux_dedansp pour determiner les probabilités d'inclusion du premier et second ordre sur tous les plans.**
+
+
+```{r}
+un_dedansp <- function(p,k,prob){
+  sizek <- length(k)
+  # nombre d'echantillons
+  sizeech <- nrow(p)
+  appartenancepik <- matrix(rep(NA,(sizeech * sizek)),nrow = sizek ,ncol=sizeech)
+  rownames(appartenancepik) <- paste("k=",k)
+  colnames(appartenancepik) <- paste("ech",1:sizeech)
+  pik <-  rep(NA,sizek)
+  #colnames(pik) <- paste("k=",k)
+  for (i in 1:sizeech){
+    for(j in 1:sizek){
+      appartenancepik[j,i] <- un_dedans(p[i,],k[j])
+      appartenancepik[appartenancepik==TRUE] <- 1
+      appartenancepik[appartenancepik==FALSE] <- 0
+      pik[j] <-  sum(appartenancepik[j,]*prob[i])
+    }
+    
+  }
+  return(list(appartenancepik,pik))
+}
+```
+
+```{r}
+deux_dedansp <- function(p,k,prob){
+  sizek <- length(k)
+  # le nombre de couple i j
+  sizecoupleij <- choose(sizek,2)
+  sizeech <- nrow(p)
+  # couple i,j
+  coupleij <- t(combn(k,2))
+  appartenancepikl <- matrix(rep(NA,(sizecoupleij * sizeech)),nrow = sizecoupleij ,ncol=sizeech)
+  rownames(appartenancepikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+  colnames(appartenancepikl) <- paste("ech",1:sizeech)
+  #rownames(pikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
+  #colnames(pikl) <- paste("ech",1:sizeech)
+  pikl <-  rep(NA,sizecoupleij)
+  for (i in 1:sizecoupleij){
+    for(j in 1:sizeech){
+      appartenancepikl[i,j] <- deux_dedans(p[j,],coupleij[i,1],coupleij[i,2])
+      appartenancepikl[appartenancepikl==TRUE] <- 1
+      appartenancepikl[appartenancepikl==FALSE] <- 0
+      pikl[i] <-  sum(appartenancepikl[i,]*prob[j])
+    }
+    
+    
+  }
+  return(list(appartenancepikl,pikl))
+}
+```
+
+
 
 **(a) : Déterminons les probabilités d’inclusion du premier et du second ordre pour ces deux plans de sondages.**
 
@@ -30,53 +85,32 @@ $\underline{\textbf{Plan1}}$
 ```{r}
 n <- 3
 N <- 6
-x <- plan1[,1:3]
-k <- c(1:6)
-# nombre d'echantillons
-sizeech <- nrow(plan1)
-appartenancepik <- matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
-rownames(appartenancepik) <- paste("k=",k)
-colnames(appartenancepik) <- paste("ech",1:sizeech)
-pik <-  matrix(rep(NA,sizeech * N),nrow = N ,ncol=sizeech)
-rownames(pik) <- paste("k=",k)
-colnames(pik) <- paste("ech",1:sizeech)
-  for (i in 1:sizeech){
-    for(j in 1:N){
-        appartenancepik[j,i] <- un_dedans(x[i,],k[j])
-        appartenancepik[appartenancepik==TRUE] <- 1
-        appartenancepik[appartenancepik==FALSE] <- 0
-        pik[j,i] <- round(appartenancepik[j,i] / n,2)
-    }
-  
-  }
-  head(appartenancepik,6)
-  head(pik,6)
+p <- plan1[,1:n]
+sizeech <- nrow(p)
+k <- c(1:N)
+probp1 <- plan1[,4]
+rownames(p) <- paste("echantillon",1:sizeech)
+appartenancepikp1 <- un_dedansp(p,k,probp1)[[1]]
+pikp1 <- un_dedansp(p,k,probp1)[[2]]
+p
+head(appartenancepikp1,6)
+head(pikp1,6)
 ```
 
 - Probabilité d'inclusion du second ordre
 
 ```{r}
-sizek <- choose(N,2)
-# couple i,jech
-coupleij <- t(combn(k,2))
-appartenancepikl <- matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
-rownames(appartenancepikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(appartenancepikl) <- paste("ech",1:sizeech)
-pikl <-  matrix(rep(NA,sizek * sizeech),nrow = sizek ,ncol=sizeech)
-rownames(pikl) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(pikl) <- paste("ech",1:sizeech)
-  for (i in 1:sizek){
-    for(j in 1:sizeech){
-        appartenancepikl[i,j] <- deux_dedans(x[j,],coupleij[i,1],coupleij[i,2])
-        appartenancepikl[appartenancepikl==TRUE] <- 1
-        appartenancepikl[appartenancepikl==FALSE] <- 0
-        pikl[i,j] <- round(appartenancepikl[i,j] / n,2)
-    }
-   
-    
-  }
- head(appartenancepikl,6)
- head(pikl,6)
+n <- 3
+N <- 6
+p <- plan1[,1:n]
+sizeech <- nrow(p)
+k <- c(1:N)
+rownames(p) <- paste("echantillon",1:sizeech)
+appartenancepiklp1 <- deux_dedansp(p,k,probp1)[[1]]
+piklp1 <- deux_dedansp(p,k,probp1)[[2]]
+p
+head(appartenancepiklp1,N)
+head(piklp1,N)
 ```
 
 $\underline{\textbf{Plan2}}$
@@ -85,48 +119,32 @@ $\underline{\textbf{Plan2}}$
 - Probabilité d'inclusion du premier ordre
 
 ```{r}
-ind <- plan2[,1:3]
-sizeind <- nrow(ind)
-appartenancepikp2 <- matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
-rownames(appartenancepikp2) <- paste("k=",k)
-colnames(appartenancepikp2) <- paste("ech",1:sizeind)
-pikp2 <-  matrix(rep(NA,sizeind * N),nrow = N ,ncol=sizeind)
-rownames(pikp2) <- paste("k=",k)
-colnames(pikp2) <- paste("ech",1:sizeind)
-  for (i in 1:sizeind){
-    for(j in 1:N){
-        appartenancepikp2[j,i] <- un_dedans(ind[i,],k[j])
-        appartenancepikp2[appartenancepikp2==TRUE] <- 1
-        appartenancepikp2[appartenancepikp2==FALSE] <- 0
-        pikp2[j,i] <- round(appartenancepikp2[j,i] / n,2)
-    }
-  
-  }
-  head(appartenancepikp2,6)
-  head(pikp2,6)
+n <- 3
+p <- plan2[,1:n]
+k <- c(1:6)
+probp2 <- plan2[,4]
+sizeech <- nrow(p)
+rownames(p) <- paste0("echantillon",1:sizeech)
+appartenancepikp2 <- un_dedansp(p,k,probp2)[[1]]
+pikp2 <- un_dedansp(p,k,probp2)[[2]]
+p
+head(appartenancepikp2,6)
+head(pikp2,6)
 ```
 
 - Probabilité d'inclusion du second ordre
 
 ```{r}
-appartenancepiklp2 <- matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
-rownames(appartenancepiklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(appartenancepiklp2) <- paste("ech",1:sizeind)
-piklp2<-  matrix(rep(NA,sizek * sizeind),nrow = sizek ,ncol=sizeind)
-rownames(piklp2) <- paste(coupleij[,1],coupleij[,2],sep = ",")
-colnames(piklp2) <- paste("ech",1:sizeind)
-  for (i in 1:sizek){
-    for(j in 1:sizeind){
-        appartenancepiklp2[i,j] <- deux_dedans(ind[j,],coupleij[i,1],coupleij[i,2])
-        appartenancepiklp2[appartenancepiklp2==TRUE] <- 1
-        appartenancepiklp2[appartenancepiklp2==FALSE] <- 0
-        piklp2[i,j] <- round(appartenancepiklp2[i,j] / n,2)
-    }
-   
-    
-  }
- head(appartenancepiklp2,6)
- head(piklp2,6)
+n <- 3
+p <- plan2[,1:n]
+sizeech <- nrow(p)
+k <- c(1:6)
+rownames(p) <- paste("echantillon",1:sizeech)
+appartenancepiklp2 <- deux_dedansp(p,k,probp2)[[1]]
+piklp2 <- deux_dedansp(p,k,probp2)[[2]]
+p
+head(appartenancepiklp2,6)
+head(piklp2,6)
 ```
 
 
@@ -146,12 +164,15 @@ ybarmu
 
 ```{r}
 # Moyenne de chaque echantillon du plan p1 
+x <- plan1[,1:3] 
 meanechtp1 <- rep(NA,sizeech)
 for (i in 1:sizeech){
   meanechtp1[i] <- mean(y[x[i,]])
 }
 meanechtp1
 # Moyenne de chaque echantillon du plan p1 
+ind <- plan2[,1:3]
+sizeind <- nrow(ind)
 meanechtp2 <- rep(NA,sizeind)
 for (i in 1:sizeind){
   meanechtp2[i] <- mean(y[ind[i,]])
@@ -189,6 +210,7 @@ Comme le biais est nul donc $\text{EQM}[\bar{y}]=\text{V}[\bar{y}]$
 
 ```{r}
 eqmybarp1 <- varybarp1
+eqmybarp1
 ```
 
 **Plan2**
@@ -238,12 +260,106 @@ $$\boxed{\pi_{i}=\frac{1}{8}}$$
 **(b) Quelle est dans ce contexte la distribution de $\boldsymbol{\widehat{t}=8\bar{y}}$ ?**
 
 ```{r}
+Pop <- c (1,2,4,4,7,7, 7,8)
 # extraction des echantillons
 echtp3 <- plan[,1:4]
-meanechtp3 <- apply(echtp3,1,mean)
+meanechtp3 <- rep(NA,nrow(echtp3))
+for (i in 1:nrow(echtp3)){
+  meanechtp3[i] <- mean(Pop[echtp3[i,]])
+}
 tchap <- 8 * meanechtp3
-hist(tchap,probability = TRUE)
-shapiro.test(tchap)
+#shapiro.test(tchap)
 ```
 
-Le test de normalité donne un p-value > 0.05 donc la distrubition de $\widehat{t}$ est une loi normale.
+
+## 3. Estimation d’Horvitz-Thompson
+
+**(a) Déterminons les probabilités d’inclusion du premier et du second ordre de ce plan de sondage.**
+
+$\underline{\text{Probabilités d’inclusion du premier ordre}}$
+
+```{r}
+N <- length(Pop)
+n <- 4
+p <- plan4[,1:n]
+sizeech <- nrow(p)
+k <- c(1:N)
+probp4 <- plan4[,5]
+appartenancepikp4 <- un_dedansp(p,k,probp4)[[1]]
+pikp4 <- un_dedansp(p,k,probp4)[[2]]
+p
+head(appartenancepikp4,N)
+head(pikp4,N)
+```
+
+$\underline{\text{Probabilités d’inclusion du seconde ordre}}$
+
+```{r}
+N <- length(Pop)
+n <- 4
+p <- plan4[,1:n]
+sizeech <- nrow(p)
+k <- c(1:N)
+appartenancepiklp4 <- deux_dedansp(p,k,probp4)[[1]]
+piklp4 <- un_dedansp(p,k,probp4)[[2]]
+p
+head(appartenancepiklp4,N)
+head(piklp4,N)
+```
+**(b) Ajoutons au tableau du tableau plan4 une colonne donnant l’estimation du total calculé par la formule (1)**
+
+L'estimation total est : 
+
+$$\widehat{\tau}=\sum_{k\in\omega}\frac{y_{k}}{\pi_{k}}$$
+
+```{r}
+echp4 <- plan4[,1:4]
+sizeechp4 <- nrow(echp4)
+# estimation total
+tauchap <- rep(NA,sizeechp4)
+# probabilité d'inclusion d'un individu
+pind <- 0.25
+for (i in 1: sizeechp4){
+  for (k in 1:length(pikp4)){
+      tauchap[i] <- sum(echp4[i,] / pikp4[k])
+  }
+}
+tauchap
+# ajout d'une colonne tauchapeaux
+plan4tauchapp <- cbind(plan4,tauchap) 
+```
+
+
+**(c) Évaluons l’espérance mathématique de cette variable aléatoire à l’aide du tableau
+obtenu. L’estimateur est-il biaisé ?**
+
+```{r}
+tauchap <- plan4tauchapp[,6]
+pr_ech <- plan4tauchapp[,5]
+esptauchap <- sum(pr_ech * tauchap)
+esptauchap
+esptauchap - mean(esptauchap)
+```
+soit $E[\widehat{\tau}]=\text{esptauchap}$ et $\widehat{\bar{\tau}}\ $ $(\text{moyenne de tauchap})$, on a montrer que $E[\widehat{\tau}] - \widehat{\bar{\tau}}=0$ \ donc l'esperance n'est pas biaisé.
+
+
+**(d) Évaluons la variance de cette variable aléatoire toujours à l’aide du tableau obtenu.**
+
+```{r}
+vartauchap <- sum(tauchap^2 * pr_ech) - (esptauchap^2)
+vartauchap
+```
+
+
+**(e) Calculons la variance avec la formule (2), page2.**
+
+$$\text{Var}[\widehat{\tau}]=\sum_{k=1}^{N-1}\sum_{l=k+1}^{N}(\pi_{k}\pi_{l}-\pi_{kl})(\frac{t_{k}}{\pi_{k}}-\frac{t_{l}}{\pi_{l}})$$
+
+```{r}
+for (k in 1:N-1){
+  for(l in k +1 :N){
+    vartau <- sum(((pikp4[k] * pikp4[l]) - piklp4) * ((echp4[k,]/pikp4[k])-(echp4[l,])/pikp4[l])^2)
+  }
+}
+```
+
